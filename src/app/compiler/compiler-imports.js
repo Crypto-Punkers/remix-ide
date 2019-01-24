@@ -85,40 +85,56 @@ module.exports = class CompilerImports {
     if (imported) {
       return cb(null, imported.content, imported.cleanUrl, imported.type, url)
     }
-    var handlers = this.handlers()
 
-    var found = false
-    handlers.forEach(function (handler) {
-      if (found) {
-        return
-      }
+    // var found = false;
 
-      var match = handler.match.exec(url)
-      if (match) {
-        found = true
+    resolver
+     .resolve(url)
+     .then(result => {
+       if (!result) {
+         cb('Unable to import "' + cleanUrl + '": ' + err)
+       } else {
+         loadingCb('Loading ' + url + ' ...')
+         return resolver.require(url);
+       }
+     }).then(result => {
+       cb(null, result.src, result.url, result.type, url)
+     });
 
-        loadingCb('Loading ' + url + ' ...')
-        handler.handler(match, function (err, content, cleanUrl) {
-          if (err) {
-            cb('Unable to import "' + cleanUrl + '": ' + err)
-            return
-          }
-          self.previouslyHandled[url] = {
-            content: content,
-            cleanUrl: cleanUrl,
-            type: handler.type
-          }
-          cb(null, content, cleanUrl, handler.type, url)
-        })
-      }
-    })
+    // var handlers = this.handlers()
 
-    if (found) {
-      return
-    } else if (/^[^:]*:\/\//.exec(url)) {
-      cb('Unable to import "' + url + '": Unsupported URL schema')
-    } else {
-      cb('Unable to import "' + url + '": File not found')
-    }
+    // var found = false
+    // handlers.forEach(function (handler) {
+    //   if (found) {
+    //     return
+    //   }
+
+    //   var match = handler.match.exec(url)
+    //   if (match) {
+    //     found = true
+
+    //     loadingCb('Loading ' + url + ' ...')
+    //     handler.handler(match, function (err, content, cleanUrl) {
+    //       if (err) {
+    //         cb('Unable to import "' + cleanUrl + '": ' + err)
+    //         return
+    //       }
+    //       self.previouslyHandled[url] = {
+    //         content: content,
+    //         cleanUrl: cleanUrl,
+    //         type: handler.type
+    //       }
+    //       cb(null, content, cleanUrl, handler.type, url)
+    //     })
+    //   }
+    // })
+
+    // if (found) {
+    //   return
+    // } else if (/^[^:]*:\/\//.exec(url)) {
+    //   cb('Unable to import "' + url + '": Unsupported URL schema')
+    // } else {
+    //   cb('Unable to import "' + url + '": File not found')
+    // }
   }
 }

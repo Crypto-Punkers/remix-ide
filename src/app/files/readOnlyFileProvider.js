@@ -1,15 +1,19 @@
 'use strict'
 var EventManager = require('../../lib/events')
+var resolver = require('resolver-engine').browser
 
-class BasicReadOnlyExplorer {
-  constructor (type) {
+var URL = URL || window.URL
+class ReadOnlyFileProvider {
+  constructor () {
     this.event = new EventManager()
     this.files = {}
-    this.paths = {}
-    this.normalizedNames = {} // contains the raw url associated with the displayed path
-    this.paths[type] = {}
-    this.type = type
+    // this.paths = {}
+    // this.paths[type] = {}
+    // this.type = type
+    this.normalizedNames = {}
     this.readonly = true
+
+    // TODO map of already resolved?
   }
 
   close (cb) {
@@ -22,28 +26,54 @@ class BasicReadOnlyExplorer {
   }
 
   exists (path, cb) {
-    if (!this.files) return cb(null, false)
-    var unprefixedPath = this.removePrefix(path)
-    cb(null, this.files[unprefixedPath] !== undefined)
+    var cbw = (...args) => {
+      console.log(`exists ${path}: ${args}`)
+      cb(...args)
+    }
+    if (!this.files) return cbw(null, false)
+
+    resolver.resolve(path)
+    .then(res => {
+      // TODO do something with 'res'
+      console.log(`Resolved ${path} to ${res}`)
+      cbw(null, this.files[path] !== undefined)
+    })
+    .catch(cbw)
   }
 
   get (path, cb) {
-    if (this.normalizedNames[path]) path = this.normalizedNames[path] // ensure we actually use the normalized path from here
-    var unprefixedPath = this.removePrefix(path)
-    var content = this.files[unprefixedPath]
-    if (!content) {
-      content = this.files[this.type + '/' + this.normalizedNames[path]]
+    var cbw = (...args) => {
+      console.log(`get ${path}: ${args}`)
+      cb(...args)
     }
-    if (cb) {
-      cb(null, content)
-    }
-    return content
+    if (this.files[path]) return cbw(null, this.files[path])
+
+    resolver.require(path)
+    .then(res => {
+      this.set(path, res.result, () => {
+        cbw(null, res.result)
+      })
+    })
+    .catch(cbw)
   }
 
   set (path, content, cb) {
-    var unprefixedPath = this.removePrefix(path)
-    this.addReadOnly(unprefixedPath, content)
-    if (cb) cb()
+    var cbw = (...args) => {
+      console.log(`set ${path}: ${args}`)
+      cb(...args)
+    }
+    resolver
+    .require(path)
+    .then(res => {
+      var provider = res.resolverName
+      var content = res.content
+      var location = res.url
+      var filePath = res.resourceName ? res.resourceName : (new URL(location).pathname)
+
+      this.addReadOnly(`${provider}/${filePath}`, content)
+      if (cb) cbw()
+    })
+    .catch(cbw)
     return true
   }
 
@@ -64,13 +94,10 @@ class BasicReadOnlyExplorer {
       this.paths[this.type + '/' + split][split + subitem] = { isDirectory: folder }
       folder = true
     }
-    console.log(`After while: split ${split}, path ${path}, rawPath ${rawPath}`)
     this.paths[this.type][split] = { isDirectory: folder }
     this.files[path] = content
     this.normalizedNames[rawPath] = path
     this.event.trigger('fileAdded', [path, true])
-    console.log('New paths structure')
-    console.log(JSON.stringify(this.paths, null, 2))
     return true
   }
 
@@ -102,4 +129,4 @@ class BasicReadOnlyExplorer {
   }
 }
 
-module.exports = BasicReadOnlyExplorer
+module.exports = ReadOnlyFileProvider

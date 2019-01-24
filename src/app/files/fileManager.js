@@ -29,7 +29,8 @@ class FileManager {
       localhostExplorer: self._components.registry.get('fileproviders/localhost').api,
       configExplorer: self._components.registry.get('fileproviders/config').api,
       gistExplorer: self._components.registry.get('fileproviders/gist').api,
-      filesProviders: self._components.registry.get('fileproviders').api
+      filesProviders: self._components.registry.get('fileproviders').api,
+      filesProvider: self._components.registry.get('fileprovider').api
     }
 
     self._deps.browserExplorer.event.register('fileRenamed', (oldName, newName, isFolder) => { this.fileRenamedEvent(oldName, newName, isFolder) })
@@ -181,13 +182,16 @@ class FileManager {
     if (!file) return null
     var provider = file.match(/[^/]*/)
     if (provider !== null && this._deps.filesProviders[provider[0]]) {
+      console.log(`Providing for ${file} with ${provider[0]}`)
       return this._deps.filesProviders[provider[0]]
     } else {
       for (var handler of this._components.compilerImport.handlers()) {
         if (handler.match.exec(file)) {
+          console.log(`Providing for ${file} with ${handler.type}`)
           return this._deps.filesProviders[handler.type]
         }
       }
+      // resolver.resolve(file)
     }
     return null
   }
