@@ -58,10 +58,6 @@ function filepanel (localRegistry) {
   var gistExplorer = new FileExplorer(self._components.registry, self._deps.fileProviders['gist'])
 
   var readonlyExplorer = new FileExplorer(self._components.registry, self._deps.readOnly)
-  // var swarmExplorer = new FileExplorer(self._components.registry, self._deps.fileProviders['swarm'])
-  var githubExplorer = new FileExplorer(self._components.registry, self._deps.fileProviders['github'])
-  // var httpExplorer = new FileExplorer(self._components.registry, self._deps.fileProviders['http'])
-  // var httpsExplorer = new FileExplorer(self._components.registry, self._deps.fileProviders['https'])
 
   // ----------------- editor panel ----------------------
   self._compilerMetadata = new CompilerMetadata(
@@ -127,7 +123,6 @@ function filepanel (localRegistry) {
             <div class="gistexplorer ${css.treeview}">${gistExplorer.init()}</div>
 
             <div class="readonlyexplorer ${css.treeview}">${readonlyExplorer.init()}</div>
-            <div class="githubexplorer ${css.treeview}">${githubExplorer.init()}</div>
           </div>
         </div>
         ${dragbar}
@@ -176,29 +171,13 @@ function filepanel (localRegistry) {
     self._deps.fileManager.switchFile(path)
   })
 
-  // swarmExplorer.events.register('focus', function (path) {
-  //   self._deps.fileManager.switchFile(path)
-  // })
-
   readonlyExplorer.events.register('focus', function (path) {
-    self._deps.fileManager.switchFile(path)
-  })
-
-  githubExplorer.events.register('focus', function (path) {
     self._deps.fileManager.switchFile(path)
   })
 
   gistExplorer.events.register('focus', function (path) {
     self._deps.fileManager.switchFile(path)
   })
-
-  // httpExplorer.events.register('focus', function (path) {
-  //   self._deps.fileManager.switchFile(path)
-  // })
-
-  // httpsExplorer.events.register('focus', function (path) {
-  //   self._deps.fileManager.switchFile(path)
-  // })
 
   self.render = function render () { return element }
 
