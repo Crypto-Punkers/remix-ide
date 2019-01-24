@@ -501,10 +501,11 @@ module.exports = class CompileTab {
       (loadingMsg) => {
         addTooltip(loadingMsg)
       },
-      (error, content, cleanUrl, type, url) => {
+      (error, content, cleanUrl, type, url) => { // these two lines
         if (!error) {
           if (self._deps.fileProviders[type]) {
-            self._deps.fileProviders[type].addReadOnly(cleanUrl, content, url)
+            console.log(`Ordered to addReadOnly: cleanUrl ${cleanUrl} type ${type} url ${url}`)
+            self._deps.fileProviders[type].addReadOnly(cleanUrl, content, url) // for eventual changes
           }
           cb(null, content)
         } else {

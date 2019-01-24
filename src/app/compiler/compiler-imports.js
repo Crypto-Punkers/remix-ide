@@ -2,7 +2,8 @@
 var base64 = require('js-base64').Base64
 var swarmgw = require('swarmgw')()
 var request = require('request')
-
+var resolver = require('resolver-engine').browser
+console.log(`Dear "standard" JS "linter", please fuck off ${resolver}`)
 module.exports = class CompilerImports {
   constructor (githubAccessToken) {
     this.githubAccessToken = githubAccessToken || (() => {})
@@ -85,6 +86,22 @@ module.exports = class CompilerImports {
     if (imported) {
       return cb(null, imported.content, imported.cleanUrl, imported.type, url)
     }
+
+    // resolver
+    //  .resolve(url)
+    //  .then(result => {
+    //    if (!result) {
+    //      cb('Unable to import "' + url + '"')
+    //      return Promise.reject('Just no.')
+    //    } else {
+    //      loadingCb('Loading ' + url + ' ...')
+    //      return resolver.require(url)
+    //    }
+    //  }).then(result => {
+    //    var cleanUrl = result.resourceName ? result.resourceName : ''
+    //    cb(null, result.content, cleanUrl, result.resolverName, url)
+    //  })
+    //  .catch(cb)
 
     var handlers = this.handlers()
 
