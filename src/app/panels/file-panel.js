@@ -46,7 +46,7 @@ function filepanel (localRegistry) {
   self._components = {}
   self._components.registry = localRegistry || globalRegistry
   self._deps = {
-    fileProvider: self._components.registry.get('fileprovider').api,
+    readOnly: self._components.registry.get('readonly').api,
     fileProviders: self._components.registry.get('fileproviders').api,
     fileManager: self._components.registry.get('filemanager').api,
     config: self._components.registry.get('config').api,
@@ -57,7 +57,7 @@ function filepanel (localRegistry) {
   var configExplorer = new FileExplorer(self._components.registry, self._deps.fileProviders['config'])
   var gistExplorer = new FileExplorer(self._components.registry, self._deps.fileProviders['gist'])
 
-  var exoExplorer = new FileExplorer(self._components.registry, self._deps.fileProvider)
+  var readonlyExplorer = new FileExplorer(self._components.registry, self._deps.readOnly)
   var swarmExplorer = new FileExplorer(self._components.registry, self._deps.fileProviders['swarm'])
   var githubExplorer = new FileExplorer(self._components.registry, self._deps.fileProviders['github'])
   var httpExplorer = new FileExplorer(self._components.registry, self._deps.fileProviders['http'])
@@ -126,7 +126,7 @@ function filepanel (localRegistry) {
             <div class="filesystemexplorer ${css.treeview}">${fileSystemExplorer.init()}</div>
             <div class="gistexplorer ${css.treeview}">${gistExplorer.init()}</div>
 
-            <div class="exoexplorer ${css.treeview}">${exoExplorer.init()}</div>
+            <div class="readonlyexplorer ${css.treeview}">${readonlyExplorer.init()}</div>
             <div class="githubexplorer ${css.treeview}">${githubExplorer.init()}</div>
           </div>
         </div>

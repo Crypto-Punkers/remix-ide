@@ -149,7 +149,7 @@ class App {
 
     self._components.filesProviders['localhost'] = new SharedFolder(remixd)
     self._components.filesProviders['gist'] = new NotPersistedExplorer('gist')
-    self._components.filesProvider = new ReadOnlyFileProvider()
+    self._components.readOnly = new ReadOnlyFileProvider()
     self._components.filesProviders['swarm'] = self._components.filesProvider // new BasicReadOnlyExplorer('swarm')
     self._components.filesProviders['github'] = new BasicReadOnlyExplorer('github')
     self._components.filesProviders['ipfs'] = self._components.filesProvider // new BasicReadOnlyExplorer('ipfs')
@@ -161,7 +161,7 @@ class App {
     registry.put({api: self._components.filesProviders['gist'], name: 'fileproviders/gist'})
     registry.put({api: self._components.filesProviders['ipfs'], name: 'fileproviders/ipfs'})
     registry.put({api: self._components.filesProviders, name: 'fileproviders'})
-    registry.put({api: self._components.filesProvider, name: 'fileprovider'})
+    registry.put({api: self._components.readOnly, name: 'readonly'})
 
     self._view = {}
 
