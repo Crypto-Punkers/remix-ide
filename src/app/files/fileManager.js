@@ -155,10 +155,16 @@ class FileManager {
       })
     }
     function _switchFile (file) {
+      var provider = self.fileProviderOf(file)
+      if (!provider) {
+        console.error(`Provider for ${file} does not exist`)
+        return
+      }
       self.saveCurrentFile()
       self._deps.config.set('currentFile', file)
       self.refreshTabs(file)
-      self.fileProviderOf(file).get(file, (error, content) => {
+
+      provider.get(file, (error, content) => {
         if (error) {
           console.log(error)
         } else {

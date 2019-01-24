@@ -157,6 +157,7 @@ class App {
     self._components.filesProviders['ipfs'] = self._components.readOnly // new BasicReadOnlyExplorer('ipfs')
     self._components.filesProviders['https'] = self._components.readOnly // new BasicReadOnlyExplorer('https')
     self._components.filesProviders['http'] = self._components.readOnly // new BasicReadOnlyExplorer('http')
+    self._components.filesProviders['external'] = self._components.readOnly // hack
     registry.put({api: self._components.filesProviders['localhost'], name: 'fileproviders/localhost'})
     registry.put({api: self._components.filesProviders['swarm'], name: 'fileproviders/swarm'})
     registry.put({api: self._components.filesProviders['github'], name: 'fileproviders/github'})

@@ -70,9 +70,9 @@ class ReadOnlyFileProvider {
       folder = true
     }
     console.log(`After while: split ${split}, path ${path}, rawPath ${rawPath}`)
-    if (!this.paths['external']) this.paths['external'] = {}
-    this.paths['external'][split] = { isDirectory: folder }
-    this.files[path] = content
+    if (!this.paths[rofpType]) this.paths[rofpType] = {}
+    this.paths[rofpType][split] = { isDirectory: folder }
+    this.files[provider + '/' + path] = content
     this.normalizedNames[rawPath] = path
     this.event.trigger('fileAdded', [path, true])
     return true
