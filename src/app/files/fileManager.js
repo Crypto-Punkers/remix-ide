@@ -30,7 +30,7 @@ class FileManager {
       configExplorer: self._components.registry.get('fileproviders/config').api,
       gistExplorer: self._components.registry.get('fileproviders/gist').api,
       filesProviders: self._components.registry.get('fileproviders').api,
-      filesProvider: self._components.registry.get('fileprovider').api
+      readOnly: self._components.registry.get('readonly').api
     }
 
     self._deps.browserExplorer.event.register('fileRenamed', (oldName, newName, isFolder) => { this.fileRenamedEvent(oldName, newName, isFolder) })
@@ -43,6 +43,9 @@ class FileManager {
     self._deps.gistExplorer.event.register('fileRemoved', (path) => { this.fileRemovedEvent(path) })
     self._deps.localhostExplorer.event.register('errored', (event) => { this.removeTabsOf(self._deps.localhostExplorer) })
     self._deps.localhostExplorer.event.register('closed', (event) => { this.removeTabsOf(self._deps.localhostExplorer) })
+
+    self._deps.readOnly.event.register('fileRenamed', (oldName, newName, isFolder) => { this.fileRenamedEvent(oldName, newName, isFolder) })
+    self._deps.readOnly.event.register('fileRemoved', (path) => { this.fileRemovedEvent(path) })
   }
 
   fileRenamedEvent (oldName, newName, isFolder) {
