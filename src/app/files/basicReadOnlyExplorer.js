@@ -10,6 +10,8 @@ class BasicReadOnlyExplorer {
     this.paths[type] = {}
     this.type = type
     this.readonly = true
+
+    window['broe'] = this
   }
 
   close (cb) {
