@@ -483,9 +483,10 @@ module.exports = class CompileTab {
         if (provider) {
           provider.get(target, (error, content) => {
             if (error) {
-              console.log(error)
+              console.log('runCompiler', error)
             } else {
               sources[target] = { content }
+              console.log('sources', sources)
               self._components.compiler.compile(sources, target)
             }
           })
