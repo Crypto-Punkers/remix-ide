@@ -127,7 +127,7 @@ module.exports = class CompilerImports {
          cleanUrl: cleanUrl,
          type: result.resolverName
        }
-       cb(null, result.content, cleanUrl, result.resolverName, url)
+       cb(null, result.content.source, cleanUrl, result.resolverName, url)
      })
      .catch(cb)
 

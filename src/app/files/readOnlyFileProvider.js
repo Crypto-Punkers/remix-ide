@@ -35,7 +35,7 @@ class ReadOnlyFileProvider {
     var unprefixedPath = this.removePrefix(path)
     var content = this.files[unprefixedPath]
     if (!content) {
-      content = this.files[this.type + '/' + this.normalizedNames[path]]
+      content = this.files[this.normalizedNames[path]]
     }
     if (cb) {
       cb(null, content)
@@ -50,15 +50,16 @@ class ReadOnlyFileProvider {
     return true
   }
 
-  addReadOnly (path, content, rawPath) {
-    var provider = 'github'
+  addReadOnly (path, content, rawPath, provider) {
+    provider = provider || 'github' // FIXME
+    path = provider + '/' + path // FIXME
 
     try { // lazy try to format JSON
       content = JSON.stringify(JSON.parse(content), null, '\t')
     } catch (e) {}
     if (!rawPath) rawPath = path
     // splitting off the path in a tree structure, the json tree is used in `resolveDirectory`
-    var split = provider + '/' + path
+    var split = path // FIXME
     var folder = false
     while (split.lastIndexOf('/') !== -1) {
       var subitem = split.substring(split.lastIndexOf('/'))
@@ -72,7 +73,7 @@ class ReadOnlyFileProvider {
     console.log(`After while: split ${split}, path ${path}, rawPath ${rawPath}`)
     if (!this.paths[rofpType]) this.paths[rofpType] = {}
     this.paths[rofpType][split] = { isDirectory: folder }
-    this.files[provider + '/' + path] = content
+    this.files[path] = content
     this.normalizedNames[rawPath] = path
     this.event.trigger('fileAdded', [path, true])
     return true
