@@ -66,13 +66,10 @@ class BasicReadOnlyExplorer {
       this.paths[this.type + '/' + split][split + subitem] = { isDirectory: folder }
       folder = true
     }
-    console.log(`After while: split ${split}, path ${path}, rawPath ${rawPath}`)
     this.paths[this.type][split] = { isDirectory: folder }
     this.files[path] = content
     this.normalizedNames[rawPath] = path
     this.event.trigger('fileAdded', [path, true])
-    console.log('New paths structure')
-    console.log(JSON.stringify(this.paths, null, 2))
     return true
   }
 

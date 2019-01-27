@@ -23,8 +23,6 @@ function fileExplorer (localRegistry, files) {
   // path currently focused on
   this.focusPath = null
 
-  window['exp'] = this
-
   self._components = {}
   self._components.registry = localRegistry || globalRegistry
   self._deps = {
@@ -90,7 +88,6 @@ function fileExplorer (localRegistry, files) {
       // after adding the file show it in the tree view
       var allPaths = Object.keys(self.files.paths)
       allPaths = allPaths.sort((a, b) => a.length - b.length)
-      console.log('Sorted', allPaths)
       allPaths.forEach(path => {
         self.files.resolveDirectory(path, (error, fileTree) => {
           if (error) console.error(error)
