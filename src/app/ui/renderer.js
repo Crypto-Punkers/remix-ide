@@ -69,7 +69,6 @@ Renderer.prototype.error = function (message, container, opt) {
     text = message.innerText
   } else {
     text = 'Renderer internal error'
-    console.log('Renderer internal error', message, container, opt)
   }
 
   var errLocation = text.match(/^([^:]*):([0-9]*):(([0-9]*):)? /)

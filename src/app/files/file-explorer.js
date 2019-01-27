@@ -198,7 +198,6 @@ function fileExplorer (localRegistry, files) {
       if (!fileTree) return
       var newTree = normalize(path, fileTree)
       self.treeView.updateNodeFromJSON(path, newTree, true)
-      console.log(`Updated ${path} with`, newTree)
     })
   })
 
