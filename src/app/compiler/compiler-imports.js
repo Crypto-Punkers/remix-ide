@@ -3,7 +3,7 @@ var base64 = require('js-base64').Base64
 var swarmgw = require('swarmgw')()
 var request = require('request')
 var resolver = require('resolver-engine').browser
-console.log(`Dear "standard" JS "linter", please fuck off ${resolver}`)
+
 module.exports = class CompilerImports {
   constructor (githubAccessToken) {
     this.githubAccessToken = githubAccessToken || (() => {})

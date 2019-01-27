@@ -515,7 +515,7 @@ module.exports = class CompileTab {
   }
   importFileCb (url, filecb) {
     const self = this
-    if (url.indexOf('/remix_tests.sol') !== -1) {
+    if (url.indexOf('remix_tests.sol') !== -1) {
       return filecb(null, remixTests.assertLibCode)
     }
     var provider = self._deps.fileManager.fileProviderOf(url)
