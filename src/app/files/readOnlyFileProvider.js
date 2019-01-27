@@ -52,7 +52,11 @@ class ReadOnlyFileProvider {
 
   addReadOnly (path, content, rawPath, provider) {
     provider = provider || 'http'
-    var schemalessPath = this.removeHTTPScheme(path)
+
+    // we really care about slashes for internal consistency
+    // so we gather as much as we can from the raw url we got
+    var recoveredSlashesPath = path.replace(/%2F/gi, '/') // global, ignore case
+    var schemalessPath = this.removeHTTPScheme(recoveredSlashesPath)
     var procuredPath = provider + '/' + schemalessPath
 
     try { // lazy try to format JSON
@@ -71,7 +75,6 @@ class ReadOnlyFileProvider {
       this.paths[this.type + '/' + split][split + subitem] = { isDirectory: folder }
       folder = true
     }
-    console.log(`After while:\n split ${split},\n path ${path},\n rawPath ${rawPath},\n procuredPath ${procuredPath}`)
     if (!this.paths[this.type]) this.paths[this.type] = {} // ensure this exists, because other functions determine root by checking for this.type
     this.paths[this.type][split] = { isDirectory: folder }
     this.files[procuredPath] = content
