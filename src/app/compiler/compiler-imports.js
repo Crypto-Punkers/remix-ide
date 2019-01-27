@@ -80,40 +80,22 @@ module.exports = class CompilerImports {
     return /^([^/]+)/.exec(url)
   }
 
-  import (url, loadingCb, cb) {
-    var imported = this.previouslyHandled[url]
+  import (uri, loadingCb, cb) {
+    var imported = this.previouslyHandled[uri]
     if (imported) {
-      return cb(null, imported.content, imported.cleanUrl, imported.type, url)
+      return cb(null, imported.content, imported.cleanUrl, imported.type, uri)
     }
 
     var self = this
     resolver
-     .resolve(url)
+     .resolve(uri)
      .then(result => {
        if (!result) {
-         cb('Unable to import "' + url + '"')
+         cb('Unable to import "' + uri + '"')
          return Promise.reject('Just no.')
        } else {
-         loadingCb('Loading ' + url + ' ...')
-         return resolver.require(url)
-        //  var match = handler.match.exec(result.url)
-        //  if (!match) {
-        //    console.log('F U ')
-        //    return
-        //  }
-        //  var handler = this.handlers()[2]
-        //  handler.handler(match, function (err, content, cleanUrl) {
-        //    if (err) {
-        //      cb('Unable to import "' + cleanUrl + '": ' + err)
-        //      return Promise.reject('Just no no no.')
-        //    }
-        //    self.previouslyHandled[url] = {
-        //      content: content,
-        //      cleanUrl: cleanUrl,
-        //      type: handler.type
-        //    }
-        //    cb(null, content, cleanUrl, handler.type, url)
-        //  })
+         loadingCb('Loading ' + uri + ' ...')
+         return resolver.require(uri)
        }
      })
      .then(result => {
@@ -122,51 +104,13 @@ module.exports = class CompilerImports {
        }
 
        var cleanUrl = result.url
-       self.previouslyHandled[url] = {
+       self.previouslyHandled[uri] = {
          content: result.content,
          cleanUrl: cleanUrl,
          type: result.resolverName
        }
-       cb(null, result.content.source, cleanUrl, result.resolverName, url)
+       cb(null, result.content.source, cleanUrl, result.resolverName, uri)
      })
      .catch(cb)
-
-    // var self = this
-
-    // var handlers = this.handlers()
-
-    // var found = false
-    // handlers.forEach(function (handler) {
-    //   if (found) {
-    //     return
-    //   }
-
-    //   var match = handler.match.exec(url)
-    //   if (match) {
-    //     found = true
-
-    //     loadingCb('Loading ' + url + ' ...')
-        // handler.handler(match, function (err, content, cleanUrl) {
-        //   if (err) {
-        //     cb('Unable to import "' + cleanUrl + '": ' + err)
-        //     return
-        //   }
-        //   self.previouslyHandled[url] = {
-        //     content: content,
-        //     cleanUrl: cleanUrl,
-        //     type: handler.type
-        //   }
-        //   cb(null, content, cleanUrl, handler.type, url)
-        // })
-    //   }
-    // })
-
-    // if (found) {
-    //   return
-    // } else if (/^[^:]*:\/\//.exec(url)) {
-    //   cb('Unable to import "' + url + '": Unsupported URL schema')
-    // } else {
-    //   cb('Unable to import "' + url + '": File not found')
-    // }
   }
 }

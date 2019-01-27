@@ -31,9 +31,9 @@ class ReadOnlyFileProvider {
   }
 
   get (path, cb) {
+    path = this.removePrefix(path)
     if (this.normalizedNames[path]) path = this.normalizedNames[path] // ensure we actually use the normalized path from here
-    var unprefixedPath = this.removePrefix(path)
-    var content = this.files[unprefixedPath]
+    var content = this.files[path]
     if (!content) {
       content = this.files[this.normalizedNames[path]]
     }
@@ -44,22 +44,23 @@ class ReadOnlyFileProvider {
   }
 
   set (path, content, cb) {
-    var unprefixedPath = this.removePrefix(path)
-    this.addReadOnly(unprefixedPath, content)
+    path = this.removePrefix(path)
+    this.addReadOnly(path, content)
     if (cb) cb()
     return true
   }
 
   addReadOnly (path, content, rawPath, provider) {
-    provider = provider || 'github' // FIXME
-    var prefixedPath = provider + '/' + path
+    provider = provider || 'http'
+    var schemalessPath = this.removeHTTPScheme(path)
+    var procuredPath = provider + '/' + schemalessPath
 
     try { // lazy try to format JSON
       content = JSON.stringify(JSON.parse(content), null, '\t')
     } catch (e) {}
     if (!rawPath) rawPath = path
     // splitting off the path in a tree structure, the json tree is used in `resolveDirectory`
-    var split = prefixedPath
+    var split = procuredPath
     var folder = false
     while (split.lastIndexOf('/') !== -1) {
       var subitem = split.substring(split.lastIndexOf('/'))
@@ -70,12 +71,12 @@ class ReadOnlyFileProvider {
       this.paths[this.type + '/' + split][split + subitem] = { isDirectory: folder }
       folder = true
     }
-    console.log(`After while: split ${split}, path ${path}, rawPath ${rawPath}`)
-    if (!this.paths[this.type]) this.paths[this.type] = {}
+    console.log(`After while:\n split ${split},\n path ${path},\n rawPath ${rawPath},\n procuredPath ${procuredPath}`)
+    if (!this.paths[this.type]) this.paths[this.type] = {} // ensure this exists, because other functions determine root by checking for this.type
     this.paths[this.type][split] = { isDirectory: folder }
-    this.files[prefixedPath] = content
-    this.normalizedNames[rawPath] = prefixedPath
-    this.event.trigger('fileAdded', [prefixedPath, true])
+    this.files[procuredPath] = content
+    this.normalizedNames[rawPath] = procuredPath
+    this.event.trigger('fileAdded', [procuredPath, true])
     return true
   }
 
@@ -104,6 +105,11 @@ class ReadOnlyFileProvider {
 
   removePrefix (path) {
     return path.indexOf(this.type + '/') === 0 ? path.replace(this.type + '/', '') : path
+  }
+
+  removeHTTPScheme (path) {
+    const httpScheme = /https?:\/\//
+    return httpScheme.exec(path) ? path.replace(httpScheme, '') : path
   }
 }
 
