@@ -52,14 +52,14 @@ class ReadOnlyFileProvider {
 
   addReadOnly (path, content, rawPath, provider) {
     provider = provider || 'github' // FIXME
-    path = provider + '/' + path // FIXME
+    var prefixedPath = provider + '/' + path
 
     try { // lazy try to format JSON
       content = JSON.stringify(JSON.parse(content), null, '\t')
     } catch (e) {}
     if (!rawPath) rawPath = path
     // splitting off the path in a tree structure, the json tree is used in `resolveDirectory`
-    var split = path // FIXME
+    var split = prefixedPath
     var folder = false
     while (split.lastIndexOf('/') !== -1) {
       var subitem = split.substring(split.lastIndexOf('/'))
@@ -71,11 +71,11 @@ class ReadOnlyFileProvider {
       folder = true
     }
     console.log(`After while: split ${split}, path ${path}, rawPath ${rawPath}`)
-    if (!this.paths[rofpType]) this.paths[rofpType] = {}
-    this.paths[rofpType][split] = { isDirectory: folder }
-    this.files[path] = content
-    this.normalizedNames[rawPath] = path
-    this.event.trigger('fileAdded', [path, true])
+    if (!this.paths[this.type]) this.paths[this.type] = {}
+    this.paths[this.type][split] = { isDirectory: folder }
+    this.files[prefixedPath] = content
+    this.normalizedNames[rawPath] = prefixedPath
+    this.event.trigger('fileAdded', [prefixedPath, true])
     return true
   }
 

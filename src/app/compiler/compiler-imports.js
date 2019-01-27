@@ -120,8 +120,8 @@ module.exports = class CompilerImports {
        if (!result) {
          return
        }
-      //  var cleanUrl = result.resourceName ? result.resourceName : ''
-       var cleanUrl = 'twoja/stara/jest/zjebana.lol'
+
+       var cleanUrl = result.url
        self.previouslyHandled[url] = {
          content: result.content,
          cleanUrl: cleanUrl,

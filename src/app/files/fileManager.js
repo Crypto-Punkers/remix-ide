@@ -191,12 +191,10 @@ class FileManager {
     if (!file) return null
     var provider = file.match(/[^/]*/)
     if (provider !== null && this._deps.filesProviders[provider[0]]) {
-      console.log(`Providing for ${file} with ${provider[0]}`)
       return this._deps.filesProviders[provider[0]]
     } else {
       for (var handler of this._components.compilerImport.handlers()) {
         if (handler.match.exec(file)) {
-          console.log(`Providing for ${file} with ${handler.type}`)
           return this._deps.filesProviders[handler.type]
         }
       }

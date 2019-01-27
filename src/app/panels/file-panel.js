@@ -58,7 +58,6 @@ function filepanel (localRegistry) {
   var gistExplorer = new FileExplorer(self._components.registry, self._deps.fileProviders['gist'])
 
   var readonlyExplorer = new FileExplorer(self._components.registry, self._deps.readOnly)
-  var githubExplorer = new FileExplorer(self._components.registry, self._deps.fileProviders['github'])
 
   // ----------------- editor panel ----------------------
   self._compilerMetadata = new CompilerMetadata(
@@ -124,7 +123,6 @@ function filepanel (localRegistry) {
             <div class="gistexplorer ${css.treeview}">${gistExplorer.init()}</div>
 
             <div class="readonlyexplorer ${css.treeview}">${readonlyExplorer.init()}</div>
-            <div class="githubexplorer ${css.treeview}">${githubExplorer.init()}</div>
           </div>
         </div>
         ${dragbar}
@@ -174,10 +172,6 @@ function filepanel (localRegistry) {
   })
 
   readonlyExplorer.events.register('focus', function (path) {
-    self._deps.fileManager.switchFile(path)
-  })
-
-  githubExplorer.events.register('focus', function (path) {
     self._deps.fileManager.switchFile(path)
   })
 
