@@ -57,13 +57,13 @@ module.exports = class CompilerImports {
          return
        }
 
-       var cleanUrl = result.url
+       var cleanUrl = result.content.url
        self.previouslyHandled[uri] = {
-         content: result.content,
+         content: result.content.source,
          cleanUrl: cleanUrl,
-         type: result.resolverName
+         type: result.metadata.resolverName
        }
-       cb(null, result.content.source, cleanUrl, result.resolverName, uri)
+       cb(null, result.content.source, cleanUrl, result.metadata.resolverName, uri)
      })
      .catch(cb)
   }
