@@ -1,6 +1,5 @@
 'use strict'
 var base64 = require('js-base64').Base64
-var swarmgw = require('swarmgw')()
 var request = require('request')
 var resolver = require('resolver-engine').browser
 
@@ -29,51 +28,6 @@ module.exports = class CompilerImports {
           cb('Content not received')
         }
       })
-  }
-
-  handleSwarmImport (url, cleanUrl, cb) {
-    swarmgw.get(url, function (err, content) {
-      cb(err, content, cleanUrl)
-    })
-  }
-
-  handleIPFS (url, cb) {
-    // replace ipfs:// with /ipfs/
-    url = url.replace(/^ipfs:\/\/?/, 'ipfs/')
-
-    return request.get(
-      {
-        url: 'https://gateway.ipfs.io/' + url
-      },
-      (err, r, data) => {
-        if (err) {
-          return cb(err || 'Unknown transport error')
-        }
-        cb(null, data, url)
-      })
-  }
-
-  handleHttpCall (url, cleanUrl, cb) {
-    return request.get(
-      {
-        url
-      },
-    (err, r, data) => {
-      if (err) {
-        return cb(err || 'Unknown transport error')
-      }
-      cb(null, data, cleanUrl)
-    })
-  }
-
-  handlers () {
-    return [
-      { type: 'github', match: /^(https?:\/\/)?(www.)?github.com\/([^/]*\/[^/]*)\/(.*)/, handler: (match, cb) => { this.handleGithubCall(match[3], match[4], cb) } },
-      { type: 'http', match: /^(http?:\/\/?(.*))$/, handler: (match, cb) => { this.handleHttpCall(match[1], match[2], cb) } },
-      { type: 'https', match: /^(https?:\/\/?(.*))$/, handler: (match, cb) => { this.handleHttpCall(match[1], match[2], cb) } },
-      { type: 'swarm', match: /^(bzz-raw?:\/\/?(.*))$/, handler: (match, cb) => { this.handleSwarmImport(match[1], match[2], cb) } },
-      { type: 'ipfs', match: /^(ipfs:\/\/?.+)/, handler: (match, cb) => { this.handleIPFS(match[1], cb) } }
-    ]
   }
 
   isRelativeImport (url) {
