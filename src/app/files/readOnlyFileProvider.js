@@ -2,14 +2,14 @@
 var EventManager = require('../../lib/events')
 
 var URL = URL || window.URL
-const rofpType = 'external'
+const readOnlyFileProviderType = 'external'
 class ReadOnlyFileProvider {
   constructor () {
     this.event = new EventManager()
     this.files = {}
     this.paths = {}
     this.normalizedNames = {} // contains the raw url associated with the displayed path
-    this.type = rofpType
+    this.type = readOnlyFileProviderType
     this.readonly = true
 
     window['ext'] = this
