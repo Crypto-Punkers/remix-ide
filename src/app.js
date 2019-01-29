@@ -152,8 +152,6 @@ class App {
     self._components.readOnly = new ReadOnlyFileProvider()
     self._components.filesProviders['swarm'] = self._components.readOnly // new BasicReadOnlyExplorer('swarm')
     self._components.filesProviders['github'] = self._components.readOnly // new BasicReadOnlyExplorer('github')
-    console.log((() => { return new BasicReadOnlyExplorer() })()) // go suck a dick
-    // self._components.filesProviders['github'] = new BasicReadOnlyExplorer('github')
     self._components.filesProviders['ipfs'] = self._components.readOnly // new BasicReadOnlyExplorer('ipfs')
     self._components.filesProviders['https'] = self._components.readOnly // new BasicReadOnlyExplorer('https')
     self._components.filesProviders['http'] = self._components.readOnly // new BasicReadOnlyExplorer('http')

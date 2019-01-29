@@ -37,7 +37,7 @@ class ReadOnlyFileProvider {
     if (!content) {
       content = this.files[this.normalizedNames[path]]
     }
-    if ('source' in content) {
+    if (typeof content === 'object' && 'source' in content) {
       content = content.source // FIXME
     }
     if (cb) {
