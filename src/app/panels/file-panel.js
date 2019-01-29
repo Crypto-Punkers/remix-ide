@@ -46,7 +46,7 @@ function filepanel (localRegistry) {
   self._components = {}
   self._components.registry = localRegistry || globalRegistry
   self._deps = {
-    readOnly: self._components.registry.get('readonly').api,
+    readOnly: self._components.registry.get('fileproviders/readonly').api,
     fileProviders: self._components.registry.get('fileproviders').api,
     fileManager: self._components.registry.get('filemanager').api,
     config: self._components.registry.get('config').api,

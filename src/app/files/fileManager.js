@@ -30,7 +30,7 @@ class FileManager {
       configExplorer: self._components.registry.get('fileproviders/config').api,
       gistExplorer: self._components.registry.get('fileproviders/gist').api,
       filesProviders: self._components.registry.get('fileproviders').api,
-      readOnly: self._components.registry.get('readonly').api
+      readOnly: self._components.registry.get('fileproviders/readonly').api
     }
 
     self._deps.browserExplorer.event.register('fileRenamed', (oldName, newName, isFolder) => { this.fileRenamedEvent(oldName, newName, isFolder) })

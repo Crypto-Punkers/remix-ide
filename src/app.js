@@ -33,7 +33,6 @@ var TxLogger = require('./app/execution/txLogger')
 var Txlistener = remixLib.execution.txListener
 var EventsDecoder = remixLib.execution.EventsDecoder
 var FileManager = require('./app/files/fileManager')
-var BasicReadOnlyExplorer = require('./app/files/basicReadOnlyExplorer')
 var NotPersistedExplorer = require('./app/files/NotPersistedExplorer')
 var toolTip = require('./app/ui/tooltip')
 var TransactionReceiptResolver = require('./transactionReceiptResolver')
@@ -162,7 +161,7 @@ class App {
     registry.put({api: self._components.filesProviders['gist'], name: 'fileproviders/gist'})
     registry.put({api: self._components.filesProviders['ipfs'], name: 'fileproviders/ipfs'})
     registry.put({api: self._components.filesProviders, name: 'fileproviders'})
-    registry.put({api: self._components.readOnly, name: 'readonly'})
+    registry.put({api: self._components.readOnly, name: 'fileproviders/readonly'})
 
     self._view = {}
 
