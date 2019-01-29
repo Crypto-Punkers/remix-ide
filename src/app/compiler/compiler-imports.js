@@ -49,6 +49,7 @@ module.exports = class CompilerImports {
          return Promise.reject('Just no.')
        } else {
          loadingCb('Loading ' + uri + ' ...')
+         console.log(`Resolved to ${result.url}`)
          return resolver.require(uri)
        }
      })

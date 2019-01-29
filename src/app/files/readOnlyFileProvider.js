@@ -79,6 +79,7 @@ class ReadOnlyFileProvider {
     this.paths[this.type][split] = { isDirectory: folder }
     this.files[procuredPath] = content
     this.normalizedNames[rawPath] = procuredPath
+    console.log('Added', path)
     this.event.trigger('fileAdded', [procuredPath, true])
     return true
   }
