@@ -1,7 +1,7 @@
 'use strict'
 var base64 = require('js-base64').Base64
 var request = require('request')
-var resolver = require('resolver-engine').browser
+var resolver = require('@resolver-engine/imports').ImportsEngine()
 
 module.exports = class CompilerImports {
   constructor (githubAccessToken) {
@@ -49,7 +49,7 @@ module.exports = class CompilerImports {
          return Promise.reject('Just no.')
        } else {
          loadingCb('Loading ' + uri + ' ...')
-         console.log(`Resolved to ${result.url}`)
+         console.log(`Resolved to ${result}`)
          return resolver.require(uri)
        }
      })
@@ -58,13 +58,15 @@ module.exports = class CompilerImports {
          return
        }
 
-       var cleanUrl = result.content.url
+       var cleanUrl = result.url
+       var content = result.source
+       var type = result.provider
        self.previouslyHandled[uri] = {
-         content: result.content.source,
-         cleanUrl: cleanUrl,
-         type: result.metadata.resolverName
+         content,
+         cleanUrl,
+         type,
        }
-       cb(null, result.content.source, cleanUrl, result.metadata.resolverName, uri)
+       cb(null, source, cleanUrl, type, uri)
      })
      .catch(cb)
   }
