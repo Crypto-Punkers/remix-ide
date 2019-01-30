@@ -64,9 +64,9 @@ module.exports = class CompilerImports {
        self.previouslyHandled[uri] = {
          content,
          cleanUrl,
-         type,
+         type
        }
-       cb(null, source, cleanUrl, type, uri)
+       cb(null, content, cleanUrl, type, uri)
      })
      .catch(cb)
   }

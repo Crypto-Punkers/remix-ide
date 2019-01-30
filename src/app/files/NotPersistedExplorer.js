@@ -72,10 +72,6 @@ class NotPersistedExplorer {
     return true
   }
 
-  isReadOnly (path) {
-    return true
-  }
-
   list () {
     return this.files
   }
@@ -115,8 +111,8 @@ class NotPersistedExplorer {
     })
   }
 
-  isReadOnly (path) {
-    return false
+  isReadOnly () {
+    return this.readonly
   }
 }
 
