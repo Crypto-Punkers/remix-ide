@@ -8,6 +8,8 @@ function Files (storage) {
   var readonly = {}
   this.type = 'browser'
 
+  this.storage = storage
+
   this.exists = function (path, cb) {
     cb(null, this._exists(path))
   }

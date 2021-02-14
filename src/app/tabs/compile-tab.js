@@ -504,7 +504,7 @@ module.exports = class CompileTab {
       (error, content, cleanUrl, type, url) => {
         if (!error) {
           if (self._deps.fileProviders[type]) {
-            self._deps.fileProviders[type].addReadOnly(cleanUrl, content, url)
+            self._deps.fileProviders[type].addReadOnly(cleanUrl, content, url, type)
           }
           cb(null, content)
         } else {
@@ -514,7 +514,7 @@ module.exports = class CompileTab {
   }
   importFileCb (url, filecb) {
     const self = this
-    if (url.indexOf('/remix_tests.sol') !== -1) {
+    if (url.indexOf('remix_tests.sol') !== -1) {
       return filecb(null, remixTests.assertLibCode)
     }
     var provider = self._deps.fileManager.fileProviderOf(url)
